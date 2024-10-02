@@ -352,3 +352,26 @@ $TTL    604800
 @       IN      A       10.75.2.2     ; IP Kotalingga
 www     IN      CNAME   panah.pasopati.it23.com.' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
+
+# no 10
+```
+echo '
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     pasopati.it23.com. root.pasopati.it23.com. (
+                        2023101001      ; Serial
+                        604800         ; Refresh
+                        86400         ; Retry
+                        2419200         ; Expire
+                        604800 )       ; Negative Cache TTL
+;
+@       IN      NS      pasopati.it23.com.
+@       IN      A       10.75.2.2     ; IP Kotalingga
+www     IN      CNAME   pasopati.it23.com.
+log.panah    IN A        10.75.2.2
+www.log.panah      IN         CNAME    log.panah.pasopati.it23.com
+@       IN      AAAA    ::1
+' > /etc/bind/jarkom/pasopati.it23.com
+```
