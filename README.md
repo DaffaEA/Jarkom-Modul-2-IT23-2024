@@ -134,7 +134,7 @@ service bind9 restart
 
 # no 7
 ## Settings named.conf.local
-```
+```bash
 zone "sudarsana.it23.com" {
     type master;
     notify yes;
@@ -166,12 +166,12 @@ zone "2.75.10.in-addr.arpa" {
 ```
 
 ## Restart
-```
+```bash
 service bind9 restart
 ```
 
 ## Majapahit named.conf.local
-```
+```bash
 zone "sudarsana.it23.com" {
     type slave;
     masters { 10.75.2.1; };
