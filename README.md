@@ -40,7 +40,7 @@ service bind9 restart
 
 # no 3 
 ### Sriwijaya
-```
+```bash
 echo 'zone "pasopati.it23.com" {
     type master;
     notify yes;
@@ -72,7 +72,7 @@ service bind9 restart
 
 # no 4
 #### Sriwijaya
-```
+```bash
 echo 'zone "rujapala.it23.com" {
     type master;
     notify yes;
@@ -104,7 +104,7 @@ service bind9 restart
 
 # no 5
 ### Other Domains
-```
+```bash
 ping sudarsana.it23.com
 ping pasopati.it23.com
 ping rujapala.it23.com
