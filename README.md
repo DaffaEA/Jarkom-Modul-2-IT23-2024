@@ -172,7 +172,7 @@ service bind9 restart
 
 ## Majapahit named.conf.local
 ```
-echo 'zone "sudarsana.it23.com" {
+zone "sudarsana.it23.com" {
     type slave;
     masters { 10.75.2.1; };
     file "/var/lib/bind/sudarsana.it23.com";
