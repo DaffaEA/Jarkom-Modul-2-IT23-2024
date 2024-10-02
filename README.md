@@ -96,7 +96,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      rujapala.it23.com.
-@       IN      A       10.75.2.2     ; IP Kotalingga
+@       IN      A       10.75.2.12     ; IP Tanjungkulai
 www     IN      CNAME   rujapala.it23.com.' > /etc/bind/jarkom/rujapala.it23.com
 
 service bind9 restart
