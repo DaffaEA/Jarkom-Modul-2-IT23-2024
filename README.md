@@ -273,7 +273,7 @@ $TTL    604800
 @       IN      NS      sudarsana.it23.com.
 @       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
-medkit  IN     A         10.75.2.14 ; IP Bedahulu
+cakra  IN     A         10.75.2.14 ; IP Bedahulu
 @        IN     AAAA     ::1
 ' > /etc/bind/jarkom/sudarsana.it23.com
 ```
