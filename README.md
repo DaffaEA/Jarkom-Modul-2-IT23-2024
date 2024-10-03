@@ -327,8 +327,7 @@ options {
 
 ```bash
 echo 'zone "panah.pasopati.it23.com" {
-    type slave;
-    masters { 10.75.1.2; };
+    type master;
     file "/etc/bind/jarkom/panah.pasopati.it23.com";
 };' >> etc/bind/named.conf.local
 
