@@ -505,9 +505,9 @@ apt-get install bind9 nginx -y
 
 echo ' # Default menggunakan Round Robin
  upstream myweb  {
-        server 10.75.2.12; #IP Serverny
-        server 10.75.2.13; #IP Stalber
-        server 10.75.2.14; #IP Lipovka
+        server 10.75.2.12;
+        server 10.75.2.13;
+        server 10.75.2.14; 
  }
 
  server {
