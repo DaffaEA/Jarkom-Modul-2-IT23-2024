@@ -405,7 +405,7 @@ apt get install unzip -y
 apt get install wget -y
 ```
 ```bash
-mkdir /var/www/pasopati.it07.com
+mkdir /var/www/pasopati.it23.com
 
 a2ensite pasopati.it23.com.conf
 
@@ -413,7 +413,7 @@ wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Sqf0
 
 unzip lb.zip  -d  lb
 
-mv lb/* /var/www/pasopati.it07.com
+mv lb/* /var/www/pasopati.it23.com
 
 cp /var/www/pasopati.it23.com/worker/index.php /var/www/pasopati.it23.com/index.php
 
@@ -425,9 +425,9 @@ cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pa
 
 echo'<VirtualHost *:80>
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/pasopati.it07.com
-    ServerName pasopati.it07.com
-    ServerAlias www.pasopati.it07.com
+    DocumentRoot /var/www/pasopati.it23.com
+    ServerName pasopati.it23.com
+    ServerAlias www.pasopati.it23.com
 </VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
 ```
 ## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
