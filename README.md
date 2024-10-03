@@ -1,29 +1,170 @@
 # Jarkom-Modul-2-IT23-2024
 
-# no 1
+# Write Up Jarkom Modul 2
+
+## Membuat Topologi
+Menambahkan satu persatu Router, Switch dan Node" lain yang dibutuhkan, dan harus memperhatikan pembagian topologi setiap kelompok yang berbeda-beda.
+
+Kami disini mendapat topologi No. 5, kami membuat Topologi yg sudah sesuai dengan ketentuan soal, dengan mengubah nama dan symbol dari masing" komponen topologi agar sesuai dengan ketentuan yang diberikan.
+
+### Agar Semua Node bisa terhubung ke internet :
+
+- Add Node dari image docker `kuuhaku86/gns3-ubuntu:1.0.1` yang sebelumnya sudah di import.
+- Atur dan sesuaikan dengan topologi (symbol, hostname, dkk)
+- Configure masing Node sesuai dengan fungsinya, perhatikan juga port yang digunakan dan tersambung kemana, agar alur jaringan bisa sesuai
+- Config : 
 ```
-apt-get update
-apt-get install bind9 -y
+#Nusantara
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+	address 10.75.1.1
+	netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+	address 10.75.2.1
+	netmask 255.255.255.0
+
+up iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.75.0.0/16
+
+#Sriwijaya (DNS Master)
+auto eth0
+iface eth0 inet static
+	address 10.75.1.2
+	netmask 255.255.255.0
+	gateway 10.75.1.1
+        up echo nameserver 192.168.122.1 > /etc/resolv.conf
+
+#apt-get update && apt-get install bind9 dnsutils -y
+
+#Majapahit (DNS Slave)
+auto eth0
+iface eth0 inet static
+	address 10.75.2.2
+	netmask 255.255.255.0
+	gateway 10.75.2.1
+        up echo nameserver 192.168.122.1 > /etc/resolv.conf
+        
+#apt-get update && apt-get install bind9 dnsutils -y
+
+#Sanjaya (client)
+auto eth0
+iface eth0 inet static
+	address 10.75.1.3
+	netmask 255.255.255.0
+	gateway 10.75.1.1
+        up echo nameserver 10.75.1.2 > /etc/resolv.conf
+        up echo nameserver 10.75.2.2 >> /etc/resolv.conf
+
+#Samaratungga (client)
+auto eth0
+iface eth0 inet static
+    address 10.75.1.4
+    netmask 255.255.255.0
+    gateway 10.75.1.1
+        up echo nameserver 10.75.1.2 > /etc/resolv.conf
+        up echo nameserver 10.75.2.2 >> /etc/resolv.conf
+
+#Ken Arok (client)
+auto eth0
+iface eth0 inet static
+    address 10.75.1.5
+    netmask 255.255.255.0
+    gateway 10.75.1.1
+        up echo nameserver 10.75.1.2 > /etc/resolv.conf
+        up echo nameserver 10.75.2.2 >> /etc/resolv.conf
+
+#Solok (client)
+auto eth0
+iface eth0 inet static
+    address 10.75.1.6
+    netmask 255.255.255.0
+    gateway 10.75.1.1
+        up echo nameserver 10.75.1.2 > /etc/resolv.conf
+        up echo nameserver 10.75.2.2 >> /etc/resolv.conf
+
+#Kotalingga (web server)
+auto eth0
+iface eth0 inet static
+    address 10.75.2.12
+    netmask 255.255.255.0
+    gateway 10.75.2.1
+        up echo nameserver 10.75.1.2 > /etc/resolv.conf
+        up echo nameserver 10.75.2.2 >> /etc/resolv.conf
+
+#Tanjungkulai (web server)
+auto eth0
+iface eth0 inet static
+    address 10.75.2.13
+    netmask 255.255.255.0
+    gateway 10.75.2.1
+        up echo nameserver 10.75.1.2 > /etc/resolv.conf
+        up echo nameserver 10.75.2.2 >> /etc/resolv.conf
+
+#Bedahulu (web server)
+auto eth0
+iface eth0 inet static
+    address 10.75.2.14
+    netmask 255.255.255.0
+    gateway 10.75.2.1
+        up echo nameserver 10.75.1.2 > /etc/resolv.conf
+        up echo nameserver 10.75.2.2 >> /etc/resolv.conf
+```
+
+DNS Forwarder (Majapahit)
+```
+Edit file /etc/bind/named.conf.options pada server Majapahit
+```
+Uncomment pada bagian ini
+```
+forwarders {
+    "IP nameserver dari Nusantara";
+};
+```
+Comment pada bagian ini
+```
+// dnssec-validation auto;
+```
+Dan tambahkan
+```
+allow-query{any;};
+```
+
+# No 1
+Pada GNS Master dan Slave (Sriwijaya dan Majapahit)
+```
+apt-get update && apt-get install bind9 dnsutils -y
 ```
 
 # no 2
 ## Sriwijaya
-```bash
-echo 'zone "sudarsana.it23.com" {
+```
+#!/bin/bash
+
+# Konfigurasi zona untuk sudarsana.it23.com
+cat <<EOF > /etc/bind/named.conf.local
+zone "sudarsana.it23.com" {
     type master;
     notify yes;
     file "/etc/bind/jarkom/sudarsana.it23.com";
-};' > /etc/bind/named.conf.local
+};
+EOF
 
-mkdir /etc/bind/jarkom
+# Buat direktori untuk file zona jika belum ada
+mkdir -p /etc/bind/jarkom
 
+# Salin template file zona
 cp /etc/bind/db.local /etc/bind/jarkom/sudarsana.it23.com
 
-echo '
+# Konfigurasi file zona sudarsana.it23.com
+cat <<EOF > /etc/bind/jarkom/sudarsana.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     sudarsana.it23.com. root.sudarsana.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -33,27 +174,37 @@ $TTL    604800
 ;
 @       IN      NS      sudarsana.it23.com.
 @       IN      A       10.75.1.6     ; IP Solok
-www     IN      CNAME   sudarsana.it23.com.' > /etc/bind/jarkom/sudarsana.it23.com
+www     IN      CNAME   sudarsana.it23.com.
+EOF
 
+# Restart layanan bind9
 service bind9 restart
 ```
+(image-2)
 
 # no 3 
 ## Sriwijaya
-```bash
-echo 'zone "pasopati.it23.com" {
+```
+#!/bin/bash
+
+# Konfigurasi zona untuk pasopati.it23.com
+cat <<EOF > /etc/bind/named.conf.local
+zone "pasopati.it23.com" {
     type master;
     notify yes;
     file "/etc/bind/jarkom/pasopati.it23.com";
-};' > /etc/bind/named.conf.local
+};
+EOF
 
+# Salin template file zona
 cp /etc/bind/db.local /etc/bind/jarkom/pasopati.it23.com
 
-echo '
+# Konfigurasi file zona pasopati.it23.com
+cat <<EOF > /etc/bind/jarkom/pasopati.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     pasopati.it23.com. root.pasopati.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -63,27 +214,37 @@ $TTL    604800
 ;
 @       IN      NS      pasopati.it23.com.
 @       IN      A       10.75.2.12     ; IP Kotalingga
-www     IN      CNAME   pasopati.it23.com.' > /etc/bind/jarkom/pasopati.it23.com
+www     IN      CNAME   pasopati.it23.com.
+EOF
 
+# Restart layanan bind9
 service bind9 restart
 ```
+(image-3)
 
 # no 4
 ## Sriwijaya
-```bash
-echo 'zone "rujapala.it23.com" {
+```
+#!/bin/bash
+
+# Konfigurasi zona untuk rujapala.it23.com
+cat <<EOF > /etc/bind/named.conf.local
+zone "rujapala.it23.com" {
     type master;
     notify yes;
     file "/etc/bind/jarkom/rujapala.it23.com";
-};' > /etc/bind/named.conf.local
+};
+EOF
 
+# Salin template file zona
 cp /etc/bind/db.local /etc/bind/jarkom/rujapala.it23.com
 
-echo '
+# Konfigurasi file zona rujapala.it23.com
+cat <<EOF > /etc/bind/jarkom/rujapala.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     rujapala.it23.com. root.rujapala.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -93,35 +254,50 @@ $TTL    604800
 ;
 @       IN      NS      rujapala.it23.com.
 @       IN      A       10.75.2.13     ; IP Tanjungkulai
-www     IN      CNAME   rujapala.it23.com.' > /etc/bind/jarkom/rujapala.it23.com
+www     IN      CNAME   rujapala.it23.com.
+EOF
 
+# Restart layanan bind9
 service bind9 restart
 ```
+(image-4)
 
 # no 5
 ## Other Domains
-```bash
+```
 ping sudarsana.it23.com
 ping pasopati.it23.com
 ping rujapala.it23.com
+
+ping www.sudarsana.it23.com
+ping www.pasopati.it23.com
+ping www.rujapala.it23.com
 ```
+(image-5)
 
 # no 6 
 
 ```bash
-echo 'zone "2.75.10.in-addr.arpa" {
+#!/bin/bash
+
+# Tambahkan konfigurasi zona untuk 2.75.10.in-addr.arpa
+cat <<EOF >> /etc/bind/named.conf.local
+zone "2.75.10.in-addr.arpa" {
     type master;
     file "/etc/bind/jarkom/2.75.10.in-addr.arpa";
-};' >> /etc/bind/named.conf.local
+};
+EOF
 
+# Salin template file zona
 cp /etc/bind/db.local /etc/bind/jarkom/2.75.10.in-addr.arpa
 
-echo '
+# Konfigurasi file zona reverse untuk 2.75.10.in-addr.arpa
+cat <<EOF > /etc/bind/jarkom/2.75.10.in-addr.arpa
 ;
 ; BIND reverse data file for 10.75.2.12
 ;
-$TTL    604800
-@       IN      SOA     pasopati.it23.com. pasopati.it23.com. (
+\$TTL    604800
+@       IN      SOA     pasopati.it23.com. root.pasopati.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
                         86400         ; Retry
@@ -129,14 +305,20 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 2.75.10.in-addr.arpa   IN      NS      pasopati.it23.com.
-2                      IN      PTR     pasopati.it23.com.' > /etc/bind/jarkom/2.75.10.in-addr.arpa
+12                     IN      PTR     pasopati.it23.com.
+EOF
 
+# Restart layanan bind9
 service bind9 restart
+
 ```
+(image-6)
 
 # no 7
 ## Settings named.conf.local
 ```bash
+# Konfigurasi zona untuk Sriwijaya
+cat <<EOF > /etc/bind/named.conf.local
 zone "sudarsana.it23.com" {
     type master;
     notify yes;
@@ -165,6 +347,10 @@ zone "2.75.10.in-addr.arpa" {
     type master;
     file "/etc/bind/jarkom/2.75.10.in-addr.arpa";
 };
+EOF
+
+# Restart layanan bind9
+service bind9 restart
 ```
 
 ## Restart
@@ -174,32 +360,52 @@ service bind9 restart
 
 ## Majapahit named.conf.local
 ```bash
-echo 'zone "sudarsana.it23.com" {
-    type slave;
-    masters { 10.75.1.2; };
-    file "/var/lib/bind/sudarsana.it23.com";
+# Konfigurasi zona untuk Sriwijaya
+cat <<EOF > /etc/bind/named.conf.local
+zone "sudarsana.it23.com" {
+    type master;
+    notify yes;
+    also-notify { 10.75.2.2; };
+    allow-transfer { 10.75.2.2; };
+    file "/etc/bind/jarkom/sudarsana.it23.com";
 };
 
 zone "pasopati.it23.com" {
-    type slave;
-    masters { 10.75.1.2; };
-    file "/var/lib/bind/pasopati.it23.com";
+    type master;
+    notify yes;
+    also-notify { 10.75.2.2; };
+    allow-transfer { 10.75.2.2; };
+    file "/etc/bind/jarkom/pasopati.it23.com";
 };
 
 zone "rujapala.it23.com" {
-    type slave;
-    masters { 10.75.1.2; };
-    file "/var/lib/bind/rujapala.it23.com";
-};' >> etc/bind/named.conf.local
+    type master;
+    notify yes;
+    also-notify { 10.75.2.2; };
+    allow-transfer { 10.75.2.2; };
+    file "/etc/bind/jarkom/rujapala.it23.com";
+};
+
+zone "2.75.10.in-addr.arpa" {
+    type master;
+    file "/etc/bind/jarkom/2.75.10.in-addr.arpa";
+};
+EOF
+
+# Restart layanan bind9
+service bind9 restart
 ```
 
 ## var/lib/bind config
 ```bash
-echo '
+#!/bin/bash
+
+# Konfigurasi file zona sudarsana.it23.com
+cat <<EOF > /var/lib/bind/sudarsana.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     sudarsana.it23.com. root.sudarsana.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -211,16 +417,14 @@ $TTL    604800
 @       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
 ;@       IN      AAAA    ::1
-' > /var/lib/bind/sudarsana.it23.com
+EOF
 
-```
-
-```bash
-echo '
+# Konfigurasi file zona pasopati.it23.com
+cat <<EOF > /var/lib/bind/pasopati.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     pasopati.it23.com. root.pasopati.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -232,15 +436,14 @@ $TTL    604800
 @       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   pasopati.it23.com.
 ;@       IN      AAAA    ::1
-' > /var/lib/bind/pasopati.it23.com
-```
+EOF
 
-```bash
-echo '
+# Konfigurasi file zona rujapala.it23.com
+cat <<EOF > /etc/bind/jarkom/rujapala.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     rujapala.it23.com. root.rujapala.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -252,17 +455,25 @@ $TTL    604800
 @       IN      A       10.75.2.13     ; IP Tanjungkulai
 www     IN      CNAME   rujapala.it23.com.
 ;@       IN      AAAA    ::1
-' > /etc/bind/jarkom/rujapala.it23.com
+EOF
+
+# Restart layanan bind9
+service bind9 restart
+
 ```
+(image-7 8)
 
 # no 8
 ## Sriwijaya
 ```bash
-echo '
+#!/bin/bash
+
+# Konfigurasi file zona sudarsana.it23.com
+cat <<EOF > /etc/bind/jarkom/sudarsana.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     sudarsana.it23.com. root.sudarsana.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -273,23 +484,27 @@ $TTL    604800
 @       IN      NS      sudarsana.it23.com.
 @       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
-medkit  IN     A         10.75.2.14 ; IP Bedahulu
-@        IN     AAAA     ::1
-' > /etc/bind/jarkom/sudarsana.it23.com
-```
-## Restart
-```bash
+medkit  IN      A       10.75.2.14    ; IP Bedahulu
+@       IN      AAAA    ::1
+EOF
+
+# Restart layanan bind9
 service bind9 restart
+
 ```
+(image-9)
 
 # no 9
 ## Sriwijaya
 ```bash
-echo '
+#!/bin/bash
+
+# Konfigurasi file zona pasopati.it23.com
+cat <<EOF > /etc/bind/jarkom/pasopati.it23.com
 ;
 ; BIND data file for local loopback interface
 ;
-$TTL    604800
+\$TTL    604800
 @       IN      SOA     pasopati.it23.com. root.pasopati.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
@@ -303,17 +518,23 @@ www     IN      CNAME   pasopati.it23.com.
 ns1     IN      A       10.75.2.2     ; IP Majapahit
 panah   IN      NS      ns1
 @       IN      AAAA    ::1
-' > /etc/bind/jarkom/pasopati.it23.com
-```
-```bash
-echo '
+EOF
+
+# Konfigurasi opsi di named.conf.options
+cat <<EOF > /etc/bind/named.conf.options
 options {
     directory "var/cache/bind";
     allow-query { any; };
     auth-nxdomain no; #conform to RFC1035
     listen-on-v6 { any; };
-};' > /etc/bind/named.conf.options
+};
+EOF
+
+# Restart layanan bind9
+service bind9 restart
+
 ```
+
 ## Majapahit
 ```bash
 echo '
@@ -352,8 +573,10 @@ $TTL    604800
 @       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   panah.pasopati.it23.com.' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
+(image-10)
 
 # no 10
+## Majapahit
 ```bash
 echo '
 ;
@@ -375,6 +598,7 @@ www.log         IN      CNAME       panah.pasopati.it23.com
 @               IN      AAAA        ::1
 ' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
+(image-11)
 
 # no 11
 ## Majapahit
@@ -393,6 +617,7 @@ echo 'options {
     listen-on-v6 { any; };
 };' > /etc/bind/named.conf.options
 ```
+(image-12)
 
 # no 12
 ## Kotalingga
@@ -408,6 +633,8 @@ apt get install wget -y
 ```bash
 mkdir /var/www/pasopati.it07.com
 
+cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pasopati.it23.com.conf
+
 a2ensite pasopati.it23.com.conf
 
 wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Sqf0TIiybYyUp5nyab4twy9svkgq8bi7' -O lb.zip
@@ -422,7 +649,6 @@ cp /var/www/pasopati.it23.com/index.php /var/www/html/index.php
 rm /var/www/html/index.html
 ```
 ```bash
-cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pasopati.it23.com
 
 echo'<VirtualHost *:80>
     ServerAdmin webmaster@localhost
@@ -431,7 +657,12 @@ echo'<VirtualHost *:80>
     ServerAlias www.pasopati.it07.com
 </VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
 ```
+`lynx pasopati.it07.com` atau `lynx [ip webserver]`
+(image-13)
+
 ## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
+(image 14-15)
+
 # no 13
 ## Solok
 ```bash
