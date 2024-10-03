@@ -348,13 +348,13 @@ $TTL    604800
                         2419200         ; Expire
                         604800 )       ; Negative Cache TTL
 ;
-@       IN      NS      sudarsana.it23.com.
+@       IN      NS      panah.pasopati.it23.com.
 @       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   panah.pasopati.it23.com.' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
 
 # no 10
-```
+```bash
 echo '
 ;
 ; BIND data file for local loopback interface
@@ -367,11 +367,70 @@ $TTL    604800
                         2419200         ; Expire
                         604800 )       ; Negative Cache TTL
 ;
-@       IN      NS      pasopati.it23.com.
-@       IN      A       10.75.2.12     ; IP Kotalingga
-www     IN      CNAME   pasopati.it23.com.
-log.panah    IN A        10.75.2.12
-www.log.panah      IN         CNAME    log.panah.pasopati.it23.com
-@       IN      AAAA    ::1
-' > /etc/bind/jarkom/pasopati.it23.com
+@               IN      NS          panah.pasopati.it23.com.
+@               IN      A           10.75.2.12     ; IP Kotalingga
+www             IN      CNAME       panah.pasopati.it23.com.
+log             IN      A           10.75.2.12
+www.log         IN      CNAME       panah.pasopati.it23.com
+@               IN      AAAA        ::1
+' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
+
+# no 11
+## Majapahit
+```bash
+echo 'options {
+    directory "/var/cache/bind";
+
+    forwarders {
+        192.168.122.1;
+    }
+
+    //dnssec-validation auto;
+    allow-query{any;};
+
+    auth-nxdomain no;    # conform to RFC1035
+    listen-on-v6 { any; };
+};' > /etc/bind/named.conf.options
+```
+
+# no 12
+## Kotalingga
+```bash
+apt-get update
+apt-get install lynx
+apt-get install apache2
+apt-get install php
+apt-get install libapache2-mod-php7.0 -y
+apt get install unzip -y
+apt get install wget -y
+```
+```bash
+mkdir /var/www/pasopati.it07.com
+
+a2ensite pasopati.it23.com.conf
+
+wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Sqf0TIiybYyUp5nyab4twy9svkgq8bi7' -O lb.zip
+
+unzip lb.zip  -d  lb
+
+mv lb/* /var/www/pasopati.it07.com
+
+cp /var/www/pasopati.it23.com/worker/index.php /var/www/pasopati.it23.com/index.php
+
+cp /var/www/pasopati.it23.com/index.php /var/www/html/index.php
+rm /var/www/html/index.html
+```
+```bash
+cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pasopati.it23.com
+
+echo'<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/pasopati.it07.com
+    ServerName pasopati.it07.com
+    ServerAlias www.pasopati.it07.com
+</VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
+```
+# no 13
+
+
