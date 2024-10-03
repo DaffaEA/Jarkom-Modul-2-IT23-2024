@@ -32,7 +32,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      sudarsana.it23.com.
-@       IN      A       10.75.1.4     ; IP Solok
+@       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.' > /etc/bind/jarkom/sudarsana.it23.com
 
 service bind9 restart
@@ -62,7 +62,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      pasopati.it23.com.
-@       IN      A       10.75.2.2     ; IP Kotalingga
+@       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   pasopati.it23.com.' > /etc/bind/jarkom/pasopati.it23.com
 
 service bind9 restart
@@ -92,7 +92,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      rujapala.it23.com.
-@       IN      A       10.75.2.12     ; IP Tanjungkulai
+@       IN      A       10.75.2.13     ; IP Tanjungkulai
 www     IN      CNAME   rujapala.it23.com.' > /etc/bind/jarkom/rujapala.it23.com
 
 service bind9 restart
@@ -118,7 +118,7 @@ cp /etc/bind/db.local /etc/bind/jarkom/2.75.10.in-addr.arpa
 
 echo '
 ;
-; BIND reverse data file for 10.75.2.2
+; BIND reverse data file for 10.75.2.12
 ;
 $TTL    604800
 @       IN      SOA     pasopati.it23.com. pasopati.it23.com. (
@@ -140,24 +140,24 @@ service bind9 restart
 zone "sudarsana.it23.com" {
     type master;
     notify yes;
-    also-notify { 10.75.2.3; };
-    allow-transfer { 10.75.2.3; };
+    also-notify { 10.75.2.2; };
+    allow-transfer { 10.75.2.2; };
     file "/etc/bind/jarkom/sudarsana.it23.com";
 };
 
 zone "pasopati.it23.com" {
     type master;
     notify yes;
-    also-notify { 10.75.2.3; };
-    allow-transfer { 10.75.2.3; };
+    also-notify { 10.75.2.2; };
+    allow-transfer { 10.75.2.2; };
     file "/etc/bind/jarkom/pasopati.it23.com";
 };
 
 zone "rujapala.it23.com" {
     type master;
     notify yes;
-    also-notify { 10.75.2.3; };
-    allow-transfer { 10.75.2.3; };
+    also-notify { 10.75.2.2; };
+    allow-transfer { 10.75.2.2; };
     file "/etc/bind/jarkom/rujapala.it23.com";
 };
 
@@ -176,19 +176,19 @@ service bind9 restart
 ```bash
 echo 'zone "sudarsana.it23.com" {
     type slave;
-    masters { 10.75.2.1; };
+    masters { 10.75.1.2; };
     file "/var/lib/bind/sudarsana.it23.com";
 };
 
 zone "pasopati.it23.com" {
     type slave;
-    masters { 10.75.2.1; };
+    masters { 10.75.1.2; };
     file "/var/lib/bind/pasopati.it23.com";
 };
 
 zone "rujapala.it23.com" {
     type slave;
-    masters { 10.75.2.1; };
+    masters { 10.75.1.2; };
     file "/var/lib/bind/rujapala.it23.com";
 };' >> etc/bind/named.conf.local
 ```
@@ -208,7 +208,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      sudarsana.it23.com.
-@       IN      A       10.75.1.4     ; IP Solok
+@       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
 ;@       IN      AAAA    ::1
 ' > /var/lib/bind/sudarsana.it23.com
@@ -229,7 +229,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      pasopati.it23.com.
-@       IN      A       10.75.2.2     ; IP Kotalingga
+@       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   pasopati.it23.com.
 ;@       IN      AAAA    ::1
 ' > /var/lib/bind/pasopati.it23.com
@@ -249,7 +249,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      rujapala.it23.com.
-@       IN      A       10.75.2.12     ; IP Tanjungkulai
+@       IN      A       10.75.2.13     ; IP Tanjungkulai
 www     IN      CNAME   rujapala.it23.com.
 ;@       IN      AAAA    ::1
 ' > /etc/bind/jarkom/rujapala.it23.com
@@ -271,9 +271,9 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      sudarsana.it23.com.
-@       IN      A       10.75.1.4     ; IP Solok
+@       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
-medkit  IN     A         10.75.2.13 ; IP Bedahulu
+medkit  IN     A         10.75.2.14 ; IP Bedahulu
 @        IN     AAAA     ::1
 ' > /etc/bind/jarkom/sudarsana.it23.com
 ```
@@ -298,9 +298,9 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      pasopati.it23.com.
-@       IN      A       10.75.2.2     ; IP Kotalingga
+@       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   pasopati.it23.com.
-ns1     IN      A       10.75.2.3     ; IP Majapahit
+ns1     IN      A       10.75.2.2     ; IP Majapahit
 panah   IN      NS      ns1
 @       IN      AAAA    ::1
 ' > /etc/bind/jarkom/pasopati.it23.com
@@ -328,7 +328,7 @@ options {
 ```bash
 echo 'zone "panah.pasopati.it23.com" {
     type slave;
-    masters { 10.75.2.1; };
+    masters { 10.75.1.2; };
     file "/etc/bind/jarkom/panah.pasopati.it23.com";
 };' >> etc/bind/named.conf.local
 
@@ -349,7 +349,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      sudarsana.it23.com.
-@       IN      A       10.75.2.2     ; IP Kotalingga
+@       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   panah.pasopati.it23.com.' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
 
@@ -368,9 +368,9 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      pasopati.it23.com.
-@       IN      A       10.75.2.2     ; IP Kotalingga
+@       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   pasopati.it23.com.
-log.panah    IN A        10.75.2.2
+log.panah    IN A        10.75.2.12
 www.log.panah      IN         CNAME    log.panah.pasopati.it23.com
 @       IN      AAAA    ::1
 ' > /etc/bind/jarkom/pasopati.it23.com
