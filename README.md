@@ -654,7 +654,11 @@ echo'<VirtualHost *:80>
     ServerAlias www.pasopati.it23.com
 </VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
 ```
+(image-13)
+
 ## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
+(image 14-15)
+
 # no 13
 ## Solok
 ```bash
@@ -680,6 +684,7 @@ echo '<VirtualHost *:80>
 
 </VirtualHost>' >> /etc/apache2/sites-available /000-default.conf
 ```
+
 
 # no 14
 ```bash
