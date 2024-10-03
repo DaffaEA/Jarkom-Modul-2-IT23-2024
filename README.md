@@ -7,6 +7,8 @@ Menambahkan satu persatu Router, Switch dan Node" lain yang dibutuhkan, dan haru
 
 Kami disini mendapat topologi No. 5, kami membuat Topologi yg sudah sesuai dengan ketentuan soal, dengan mengubah nama dan symbol dari masing" komponen topologi agar sesuai dengan ketentuan yang diberikan.
 
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/1.png)
+
 ### Agar Semua Node bisa terhubung ke internet :
 
 - Add Node dari image docker `kuuhaku86/gns3-ubuntu:1.0.1` yang sebelumnya sudah di import.
