@@ -458,15 +458,33 @@ echo '<VirtualHost *:80>
 
 # no 14
 ```bash
+echo '
+nameserver 192.168.122.1
+' > /etc/resolv.conf
 apt-get update
 apt install nginx php php-fpm -y
+
+mkdir /var/www/jarkom
+
+echo " <?php
+\$hostname = gethostname();
+\$date = date('Y-m-d H:i:s');
+\$php_version = phpversion();
+\$username = get_current_user();
+
+echo \"Hello World!<br\>\";
+echo \"Saya adalah: \$username<br\>\";
+echo \"Saat ini berada di: \$hostname<br\>\";
+echo \"Versi PHP yang saya gunakan: \$php_version<br\>\";
+echo \"Tanggal saat ini: \$date<b\r\>\";
+?>" > /var/www/jarkom/index.php
 
 echo '
  server {
 
         listen 80;
 
-        root /var/www/pasopati.it23.com;
+        root /var/www/jarkom;
 
         index index.php index.html index.htm;
         server_name _;
@@ -484,9 +502,12 @@ echo '
         location ~ /\.ht {
                         deny all;
         }
- } ' > /etc/nginx/sites-available/pasopati.it23.com
 
-ln -s /etc/nginx/sites-available/pasopati.it23.com /etc/nginx/sites-enabled/pasopati.it23.com
+        error_log /var/log/nginx/jarkom_error.log;
+        access_log /var/log/nginx/jarkom_access.log;
+ } ' > /etc/nginx/sites-available/jarkom
+
+ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled/jarkom
 rm -rf /etc/nginx/sites-enabled/default
 
 service nginx restart
