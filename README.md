@@ -296,8 +296,8 @@ cat <<EOF > /etc/bind/jarkom/2.75.10.in-addr.arpa
 ;
 ; BIND reverse data file for 10.75.2.12
 ;
-\$TTL    604800
-@       IN      SOA     pasopati.it23.com. root.pasopati.it23.com. (
+$TTL    604800
+@       IN      SOA     pasopati.it23.com. pasopati.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
                         86400         ; Retry
@@ -305,8 +305,7 @@ cat <<EOF > /etc/bind/jarkom/2.75.10.in-addr.arpa
                         604800 )       ; Negative Cache TTL
 ;
 2.75.10.in-addr.arpa   IN      NS      pasopati.it23.com.
-12                     IN      PTR     pasopati.it23.com.
-EOF
+2                      IN      PTR     pasopati.it23.com.' > /etc/bind/jarkom/2.75.10.in-addr.arpa
 
 # Restart layanan bind9
 service bind9 restart
@@ -484,11 +483,12 @@ cat <<EOF > /etc/bind/jarkom/sudarsana.it23.com
 @       IN      NS      sudarsana.it23.com.
 @       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
-medkit  IN      A       10.75.2.14    ; IP Bedahulu
-@       IN      AAAA    ::1
-EOF
-
-# Restart layanan bind9
+medkit  IN     A         10.75.2.14 ; IP Bedahulu
+@        IN     AAAA     ::1
+' > /etc/bind/jarkom/sudarsana.it23.com
+```
+## Restart
+```bash
 service bind9 restart
 
 ```
@@ -548,8 +548,7 @@ options {
 
 ```bash
 echo 'zone "panah.pasopati.it23.com" {
-    type slave;
-    masters { 10.75.1.2; };
+    type master;
     file "/etc/bind/jarkom/panah.pasopati.it23.com";
 };' >> etc/bind/named.conf.local
 
@@ -633,15 +632,13 @@ apt get install wget -y
 ```bash
 mkdir /var/www/pasopati.it07.com
 
-cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pasopati.it23.com.conf
-
 a2ensite pasopati.it23.com.conf
 
 wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1Sqf0TIiybYyUp5nyab4twy9svkgq8bi7' -O lb.zip
 
 unzip lb.zip  -d  lb
 
-mv lb/* /var/www/pasopati.it07.com
+mv lb/* /var/www/pasopati.it23.com
 
 cp /var/www/pasopati.it23.com/worker/index.php /var/www/pasopati.it23.com/index.php
 
@@ -652,17 +649,12 @@ rm /var/www/html/index.html
 
 echo'<VirtualHost *:80>
     ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/pasopati.it07.com
-    ServerName pasopati.it07.com
-    ServerAlias www.pasopati.it07.com
+    DocumentRoot /var/www/pasopati.it23.com
+    ServerName pasopati.it23.com
+    ServerAlias www.pasopati.it23.com
 </VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
 ```
-`lynx pasopati.it07.com` atau `lynx [ip webserver]`
-(image-13)
-
 ## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
-(image 14-15)
-
 # no 13
 ## Solok
 ```bash
@@ -691,15 +683,33 @@ echo '<VirtualHost *:80>
 
 # no 14
 ```bash
+echo '
+nameserver 192.168.122.1
+' > /etc/resolv.conf
 apt-get update
 apt install nginx php php-fpm -y
+
+mkdir /var/www/jarkom
+
+echo " <?php
+\$hostname = gethostname();
+\$date = date('Y-m-d H:i:s');
+\$php_version = phpversion();
+\$username = get_current_user();
+
+echo \"Hello World!<br\>\";
+echo \"Saya adalah: \$username<br\>\";
+echo \"Saat ini berada di: \$hostname<br\>\";
+echo \"Versi PHP yang saya gunakan: \$php_version<br\>\";
+echo \"Tanggal saat ini: \$date<b\r\>\";
+?>" > /var/www/jarkom/index.php
 
 echo '
  server {
 
         listen 80;
 
-        root /var/www/pasopati.it23.com;
+        root /var/www/jarkom;
 
         index index.php index.html index.htm;
         server_name _;
@@ -717,9 +727,12 @@ echo '
         location ~ /\.ht {
                         deny all;
         }
- } ' > /etc/nginx/sites-available/pasopati.it23.com
 
-ln -s /etc/nginx/sites-available/pasopati.it23.com /etc/nginx/sites-enabled/pasopati.it23.com
+        error_log /var/log/nginx/jarkom_error.log;
+        access_log /var/log/nginx/jarkom_access.log;
+ } ' > /etc/nginx/sites-available/jarkom
+
+ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled/jarkom
 rm -rf /etc/nginx/sites-enabled/default
 
 service nginx restart
