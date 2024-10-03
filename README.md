@@ -121,7 +121,7 @@ echo '
 ; BIND reverse data file for 10.75.2.12
 ;
 $TTL    604800
-@       IN      SOA     pasopati.it23.com. pasopati.it23.com. (
+@       IN      SOA     pasopati.it23.com. root.pasopati.it23.com. (
                         2023101001      ; Serial
                         604800         ; Refresh
                         86400         ; Retry
@@ -129,7 +129,7 @@ $TTL    604800
                         604800 )       ; Negative Cache TTL
 ;
 2.75.10.in-addr.arpa   IN      NS      pasopati.it23.com.
-2                      IN      PTR     pasopati.it23.com.' > /etc/bind/jarkom/2.75.10.in-addr.arpa
+12                     IN      PTR     pasopati.it23.com.' > /etc/bind/jarkom/2.75.10.in-addr.arpa
 
 service bind9 restart
 ```
