@@ -431,6 +431,100 @@ echo'<VirtualHost *:80>
     ServerAlias www.pasopati.it07.com
 </VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
 ```
+## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
 # no 13
+## Solok
+```bash
+apt-get update
+apt-get install apache2 -y
+
+a2enmod proxy
+a2enmod proxy_balancer
+a2enmod proxy_http
+a2enmod lbmethod_byrequests
+```
+```bash
+echo '<VirtualHost *:80>
+    <Proxy balancer://mycluster>
+        BalancerMember http://10.75.2.12
+        BalancerMember http://10.75.2.13
+        BalancerMember http://10.75.2.14
+        ProxySet lbmethod=byrequests
+    </Proxy>
+
+    ProxyPass / balancer://mycluster/
+    ProxyPassReverse / balancer://mycluster/
+
+</VirtualHost>' >> /etc/apache2/sites-available /000-default.conf
+```
+
+# no 14
+```bash
+apt-get update
+apt install nginx php php-fpm -y
+
+echo '
+ server {
+
+        listen 80;
+
+        root /var/www/pasopati.it23.com;
+
+        index index.php index.html index.htm;
+        server_name _;
+
+        location / {
+                        try_files $uri $uri/ /index.php?$query_string;
+        }
+
+        # pass PHP scripts to FastCGI server
+        location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+        }
+
+        location ~ /\.ht {
+                        deny all;
+        }
+ } ' > /etc/nginx/sites-available/pasopati.it23.com
+
+ln -s /etc/nginx/sites-available/pasopati.it23.com /etc/nginx/sites-enabled/pasopati.it23.com
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+service php7.0-fpm stop
+service php7.0-fpm start
+```
+## Solok (lb)
+```bash
+apt-get install nginx -y
+```
+```bash
+apt-get update
+apt-get install bind9 nginx -y
+
+echo ' # Default menggunakan Round Robin
+ upstream myweb  {
+        server 10.75.2.12; #IP Serverny
+        server 10.75.2.13; #IP Stalber
+        server 10.75.2.14; #IP Lipovka
+ }
+
+ server {
+        listen 80;
+        server_name _;
+
+        location / {
+        proxy_pass http://myweb;
+        }
+ }' > /etc/nginx/sites-available/lb
+
+ln -s /etc/nginx/sites-available/lb /etc/nginx/sites-enabled/lb
+
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+```
+
 
 
