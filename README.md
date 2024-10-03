@@ -7,8 +7,6 @@ Menambahkan satu persatu Router, Switch dan Node" lain yang dibutuhkan, dan haru
 
 Kami disini mendapat topologi No. 5, kami membuat Topologi yg sudah sesuai dengan ketentuan soal, dengan mengubah nama dan symbol dari masing" komponen topologi agar sesuai dengan ketentuan yang diberikan.
 
-![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/1.png)
-
 ### Agar Semua Node bisa terhubung ke internet :
 
 - Add Node dari image docker `kuuhaku86/gns3-ubuntu:1.0.1` yang sebelumnya sudah di import.
@@ -135,6 +133,8 @@ Dan tambahkan
 allow-query{any;};
 ```
 
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/1.png)
+
 # No 1
 Pada GNS Master dan Slave (Sriwijaya dan Majapahit)
 ```
@@ -182,7 +182,7 @@ EOF
 # Restart layanan bind9
 service bind9 restart
 ```
-(image-2)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/2.png)
 
 # no 3 
 ## Sriwijaya
@@ -222,7 +222,7 @@ EOF
 # Restart layanan bind9
 service bind9 restart
 ```
-(image-3)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/3.png)
 
 # no 4
 ## Sriwijaya
@@ -262,7 +262,7 @@ EOF
 # Restart layanan bind9
 service bind9 restart
 ```
-(image-4)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/4.png)
 
 # no 5
 ## Other Domains
@@ -275,7 +275,7 @@ ping www.sudarsana.it23.com
 ping www.pasopati.it23.com
 ping www.rujapala.it23.com
 ```
-(image-5)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/5.png)
 
 # no 6 
 
@@ -313,7 +313,7 @@ $TTL    604800
 service bind9 restart
 
 ```
-(image-6)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/6.png)
 
 # no 7
 ## Settings named.conf.local
@@ -462,7 +462,8 @@ EOF
 service bind9 restart
 
 ```
-(image-7 8)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/7.png)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/8.png)
 
 # no 8
 ## Sriwijaya
@@ -494,7 +495,7 @@ medkit  IN     A         10.75.2.14 ; IP Bedahulu
 service bind9 restart
 
 ```
-(image-9)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/9.png)
 
 # no 9
 ## Sriwijaya
@@ -574,7 +575,7 @@ $TTL    604800
 @       IN      A       10.75.2.12     ; IP Kotalingga
 www     IN      CNAME   panah.pasopati.it23.com.' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
-(image-10)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/10.png)
 
 # no 10
 ## Majapahit
@@ -599,7 +600,7 @@ www.log         IN      CNAME       panah.pasopati.it23.com
 @               IN      AAAA        ::1
 ' > /etc/bind/jarkom/panah.pasopati.it23.com
 ```
-(image-11)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/11.png)
 
 # no 11
 ## Majapahit
@@ -618,7 +619,7 @@ echo 'options {
     listen-on-v6 { any; };
 };' > /etc/bind/named.conf.options
 ```
-(image-12)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/12.png)
 
 # no 12
 ## Kotalingga
@@ -656,10 +657,11 @@ echo'<VirtualHost *:80>
     ServerAlias www.pasopati.it23.com
 </VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
 ```
-(image-13)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/13.png)
 
 ## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
-(image 14-15)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/14.png)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/15.png)
 
 # no 13
 ## Solok
