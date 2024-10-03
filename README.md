@@ -430,7 +430,6 @@ echo'<VirtualHost *:80>
     ServerAlias www.pasopati.it23.com
 </VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
 ```
-## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
 # no 13
 ## Solok
 ```bash
