@@ -486,7 +486,7 @@ cat <<EOF > /etc/bind/jarkom/sudarsana.it23.com
 @       IN      NS      sudarsana.it23.com.
 @       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
-medkit  IN     A         10.75.2.14 ; IP Bedahulu
+cakra  IN     A         10.75.2.14 ; IP Bedahulu
 @        IN     AAAA     ::1
 ' > /etc/bind/jarkom/sudarsana.it23.com
 ```
@@ -633,7 +633,7 @@ apt get install unzip -y
 apt get install wget -y
 ```
 ```bash
-mkdir /var/www/pasopati.it07.com
+mkdir /var/www/pasopati.it23.com
 
 a2ensite pasopati.it23.com.conf
 
