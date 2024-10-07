@@ -683,7 +683,10 @@ echo '<VirtualHost *:80>
 
 </VirtualHost>' >> /etc/apache2/sites-available/000-default.conf
 ```
-(image 16 - 19)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/16.png)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/17.png)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/18.png)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/19.png)
 
 # no 14
 ```bash
@@ -751,6 +754,6 @@ rm -rf /etc/nginx/sites-enabled/default
 
 service nginx restart
 ```
-
-
-
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/20.png)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/21.png)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/22.png)
