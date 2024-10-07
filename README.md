@@ -625,15 +625,20 @@ echo 'options {
 ## Kotalingga
 ```bash
 apt-get update
-apt-get install lynx
-apt-get install apache2
-apt-get install php
-apt-get install libapache2-mod-php7.0 -y
-apt get install unzip -y
-apt get install wget -y
+apt-get install apache2 libapache2-mod-php7.0 php wget unzip -y
 ```
 ```bash
-mkdir /var/www/pasopati.it07.com
+cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pasopati.it23.com.conf
+
+<VirtualHost *:80>
+    ServerAdmin webmaster@localhost
+    DocumentRoot /var/www/pasopati.it23.com
+    ServerName pasopati.it23.com
+    ServerAlias www.pasopati.it23.com
+</VirtualHost>
+```
+```bash
+mkdir /var/www/pasopati.it23.com
 
 a2ensite pasopati.it23.com.conf
 
@@ -648,15 +653,6 @@ cp /var/www/pasopati.it23.com/worker/index.php /var/www/pasopati.it23.com/index.
 cp /var/www/pasopati.it23.com/index.php /var/www/html/index.php
 rm /var/www/html/index.html
 ```
-```bash
-
-echo'<VirtualHost *:80>
-    ServerAdmin webmaster@localhost
-    DocumentRoot /var/www/pasopati.it23.com
-    ServerName pasopati.it23.com
-    ServerAlias www.pasopati.it23.com
-</VirtualHost>' > /etc/apache2/sites-available/pasopati.it23.com
-```
 ![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/13.png)
 
 ## ulangi untuk setiap webserver (sudarsana, pasopati, rujapala)
@@ -666,13 +662,9 @@ echo'<VirtualHost *:80>
 # no 13
 ## Solok
 ```bash
-apt-get update
-apt-get install apache2 -y
+apt-get install lynx apache2 apache2-utils php7.0 php7.0-fpm -y
 
-a2enmod proxy
-a2enmod proxy_balancer
-a2enmod proxy_http
-a2enmod lbmethod_byrequests
+a2enmod proxy proxy_balancer proxy_http lbmethod_byrequests lbmethod_bytraffic lbmethod_bybusyness
 ```
 ```bash
 echo '<VirtualHost *:80>
@@ -686,63 +678,41 @@ echo '<VirtualHost *:80>
     ProxyPass / balancer://mycluster/
     ProxyPassReverse / balancer://mycluster/
 
-</VirtualHost>' >> /etc/apache2/sites-available /000-default.conf
+</VirtualHost>' >> /etc/apache2/sites-available/000-default.conf
 ```
-
+(image 16 - 19)
 
 # no 14
 ```bash
-echo '
-nameserver 192.168.122.1
-' > /etc/resolv.conf
+
 apt-get update
 apt install nginx php php-fpm -y
 
-mkdir /var/www/jarkom
+echo 'server {
+    listen 80;
 
-echo " <?php
-\$hostname = gethostname();
-\$date = date('Y-m-d H:i:s');
-\$php_version = phpversion();
-\$username = get_current_user();
+    root /var/www/pasopati.it23.com;
 
-echo \"Hello World!<br\>\";
-echo \"Saya adalah: \$username<br\>\";
-echo \"Saat ini berada di: \$hostname<br\>\";
-echo \"Versi PHP yang saya gunakan: \$php_version<br\>\";
-echo \"Tanggal saat ini: \$date<b\r\>\";
-?>" > /var/www/jarkom/index.php
+    index index.php index.html index.htm;
+    server_name _ pasopati.it23.com www.pasopati.it23.com;
 
-echo '
- server {
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
 
-        listen 80;
-
-        root /var/www/jarkom;
-
-        index index.php index.html index.htm;
-        server_name _;
-
-        location / {
-                        try_files $uri $uri/ /index.php?$query_string;
-        }
-
-        # pass PHP scripts to FastCGI server
-        location ~ \.php$ {
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
         include snippets/fastcgi-php.conf;
         fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-        }
+    }
 
-        location ~ /\.ht {
-                        deny all;
-        }
+    location ~ /\.ht {
+        deny all;
+    }
+}' > /etc/nginx/sites-available/pasopati.it23.com
 
-        error_log /var/log/nginx/jarkom_error.log;
-        access_log /var/log/nginx/jarkom_access.log;
- } ' > /etc/nginx/sites-available/jarkom
-
-ln -s /etc/nginx/sites-available/jarkom /etc/nginx/sites-enabled/jarkom
-rm -rf /etc/nginx/sites-enabled/default
+ln -s /etc/nginx/sites-available/pasopati.it23.com /etc/nginx/sites-enabled/pasopati.it23.com
+rm /etc/nginx/sites-enabled/default
 
 service nginx restart
 service php7.0-fpm stop
