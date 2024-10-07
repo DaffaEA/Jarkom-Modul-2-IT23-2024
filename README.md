@@ -486,7 +486,7 @@ cat <<EOF > /etc/bind/jarkom/sudarsana.it23.com
 @       IN      NS      sudarsana.it23.com.
 @       IN      A       10.75.1.6     ; IP Solok
 www     IN      CNAME   sudarsana.it23.com.
-medkit  IN     A         10.75.2.14 ; IP Bedahulu
+cakra  IN     A         10.75.2.14 ; IP Bedahulu
 @        IN     AAAA     ::1
 ' > /etc/bind/jarkom/sudarsana.it23.com
 ```
@@ -628,6 +628,7 @@ apt-get update
 apt-get install apache2 libapache2-mod-php7.0 php wget unzip -y
 ```
 ```bash
+<<<<<<< HEAD
 cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pasopati.it23.com.conf
 
 <VirtualHost *:80>
@@ -638,6 +639,8 @@ cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/pa
 </VirtualHost>
 ```
 ```bash
+=======
+>>>>>>> d1e0dada26717e798be5c41cc0b3af05458227f8
 mkdir /var/www/pasopati.it23.com
 
 a2ensite pasopati.it23.com.conf
