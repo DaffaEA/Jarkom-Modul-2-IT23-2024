@@ -811,10 +811,10 @@ rm -rf /etc/nginx/sites-enabled/default
 service nginx restart
 ```
 ## Round Robbin
-(image 23)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/23.png)
 
 ## Least Conn
-(image 24)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/24.png)
 
 ## Rangkuman Hasil Benchmark
 ```
@@ -837,7 +837,7 @@ Transfer rate: 1002.46 KBytes/sec
 
 ## Grafik request per second untuk masing masing algoritma.
 
-> Hasil pengujian algoritma masing" webserver bisa dilihat di image/lb 
+> Hasil pengujian algoritma masing" webserver bisa dilihat di [image/lb](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/tree/main/image/lb) 
 ```
 Kotalingga roundrobin :
 time: 0.442 s
@@ -884,7 +884,7 @@ Bedahulu juga menunjukkan performa yang baik dengan rps yang cukup tinggi (2168.
 
 Secara keseluruhan, Bedahulu (10.75.2.14) menunjukkan performa yang konsisten dan unggul dalam kedua metode load balancing yang diuji.
 
-(meme)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/meme.jpg)
 
 # no 16
 ## Sriwijaya (DNS Master)
@@ -946,7 +946,7 @@ server {
 }' > /etc/nginx/sites-available/jarkom
 ```
 
-(image-25)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/25.png)
 
 # no 17
 
@@ -1003,7 +1003,7 @@ service nginx restart
 ```
 Pada Client : `lynx solok.it23.com:4696`
 
-(image-26)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/26.png)
 
 # no 18
 
@@ -1060,7 +1060,7 @@ server {
 service nginx restart
 ```
 
-(image-27)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/27.png)
 
 # no 19
 ## Sriwijaya
@@ -1122,6 +1122,6 @@ service nginx restart
 # no 20 
 Worker tersebut harus dapat di akses dengan sekiantterimakasih.xxxx.com dengan alias www.sekiantterimakasih.xxxx.com.
 
-(image-28)
+![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/28.png)
 
 # Alhamdulillah 'ala Kulli Hal
