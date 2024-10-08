@@ -759,16 +759,142 @@ service nginx restart
 ![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/22.png)
 
 # no 15
+```
+ab -n 1000 -c 10 http://10.75.1.6/
+```
+### Round Robbin
+```
+echo '
+ upstream myweb  {
+        server 10.75.2.12;
+        server 10.75.2.13;
+        server 10.75.2.14; 
+ }
+
+ server {
+        listen 80;
+        server_name _;
+
+        location / {
+        proxy_pass http://myweb;
+        }
+ }' > /etc/nginx/sites-available/lb
+
+ln -s /etc/nginx/sites-available/lb /etc/nginx/sites-enabled/lb
+
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+```
+### Least-Conn
+```
+echo 'upstream myweb {
+    least_conn;
+    server 10.75.2.12;
+    server 10.75.2.13;
+    server 10.75.2.14; 
+}
+
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://myweb;
+    }
+}' > /etc/nginx/sites-available/lb
+
+ln -s /etc/nginx/sites-available/lb /etc/nginx/sites-enabled/lb
+
+rm -rf /etc/nginx/sites-enabled/default
+
+service nginx restart
+```
+## Round Robbin
+(image 23)
+
+## Least Conn
+(image 24)
+
+## Rangkuman Hasil Benchmark
+```
+#Round Robbin
+Complete requests: 1000
+Failed requests: 666
+Time taken for test: 0.308 seconds
+Requests per second (RPS): 3245.34 [#/sec] (mean)
+Time per request (TPR): 3.081 ms (mean)
+Transfer rate: 1004.67 KBytes/sec
+
+#Least Conn
+Complete requests: 1000
+Failed requests: 629
+Time taken for test: 0.309 seconds
+Requests per second (RPS): 3235.90 [#/sec] (mean)
+Time per request (TPR): 3.090 ms (mean)
+Transfer rate: 1002.46 KBytes/sec
+```
+
+## Grafik request per second untuk masing masing algoritma.
+
+> Hasil pengujian algoritma masing" webserver bisa dilihat di image/lb 
+```
+Kotalingga roundrobin :
+time: 0.442 s
+complete 1000/1000
+rps: 2262.20 /sec
+transfer rate: 700.32 kb/sec
+
+Tanjungkulai roundrobin :
+time: 0.472 s
+complete 1000/1000
+rps: 2119.72 /sec
+transfer rate: 656.20 kb/sec
+
+Bedahulu roundrobin :
+time: 0.419 s
+complete 1000/1000
+rps: 2385.48 /sec
+transfer rate: 738.47 kb/sec
+
+Kotalingga Least-Conn :
+time: 0.441 s
+complete 1000/1000
+rps: 2269.95 /sec
+transfer rate: 702.74 kb/sec
+
+Tanjungkulai Least-Conn :
+time: 0.470 s
+complete 1000/1000
+rps: 2129.73 /sec
+transfer rate: 659.85 kb/sec
+
+Bedahulu Least-Conn :
+time: 0.461 s
+complete 1000/1000
+rps: 2168.02 /sec
+transfer rate: 671.84 kb/sec
+```
+
+> Berdasarkan data yang ada, Bedahulu tampaknya menjadi webserver terbaik di antara ketiga pilihan tersebut.
+- Roundrobin:
+Bedahulu memiliki waktu tercepat (0.419 s) dan rps tertinggi (2385.48 /sec) serta transfer rate tertinggi (738.47 kb/sec).
+- Least-Conn:
+Bedahulu juga menunjukkan performa yang baik dengan rps yang cukup tinggi (2168.02 /sec) dan transfer rate yang lebih baik dibandingkan Tanjungkulai (671.84 kb/sec).
+
+Secara keseluruhan, Bedahulu (10.75.2.14) menunjukkan performa yang konsisten dan unggul dalam kedua metode load balancing yang diuji.
+
+(meme)
 
 # no 16
-## Sriwijaya
+## Sriwijaya (DNS Master)
 
 ```bash
 echo '
 zone "solok.it23.com" {
     type master;
     file "/etc/bind/it23/solok.it23.com";
-};' >> etc/bind/named.conf.local
+};' >> /etc/bind/named.conf.local
 
 cp /etc/bind/db.local /etc/bind/jarkom/solok.it23.com
 
@@ -785,10 +911,12 @@ $TTL    604800
                          604800 )       ; Negative Cache TTL
 ;
 @       IN      NS      solok.it23.com.
-@       IN      A       <best web server api>
+@       IN      A       10.75.2.14
 @       IN      AAAA    ::1
 www     IN      CNAME   solok.it23.com.
-``` ' >> /etc/bind/jarkom/solok.it23.com
+' > /etc/bind/jarkom/solok.it23.com
+
+service bind9 restart
 ```
 
 ## webserver terbaik
@@ -818,7 +946,11 @@ server {
 }' > /etc/nginx/sites-available/jarkom
 ```
 
+(image-25)
+
 # no 17
+
+### webserver terbaik = Bedahulu (10.75.2.14)
 ```bash
 echo '
 server {
@@ -866,21 +998,25 @@ server {
         deny all;
     }
 }' > /etc/nginx/sites-available/jarkom
-```
 
+service nginx restart
+```
+Pada Client : `lynx solok.it23.com:4696`
+
+(image-26)
 
 # no 18
 
-
+## Solok (load balancer)
 
 ```bash
 apt-get install php-fpm -y
 
 echo '
 upstream webserver  {
-        server 10.75.2.12;
-        server 10.75.2.13;
-        server 10.75.2.14; 
+    server 10.75.2.12;
+    server 10.75.2.13;
+    server 10.75.2.14;
 }
 
 server {
@@ -920,7 +1056,11 @@ server {
     server_name _;
     return 301 http://www.solok.it23.com;
 } ' > /etc/nginx/sites-available/jarkom
+
+service nginx restart
 ```
+
+(image-27)
 
 # no 19
 ## Sriwijaya
@@ -928,36 +1068,38 @@ server {
 echo '
 zone "sekiantterimakasih.it23.com" {
     type master;
-    file "/etc/bind/it23/sekiantterimakasih.it23.com";
+    file "/etc/bind/jarkom/sekiantterimakasih.it23.com";
 }; >> /etc/bind/named.conf.local
 
-cp /etc/bind/db.local /etc/bind/jarkom/sekianterimakasih.it23.com
+cp /etc/bind/db.local /etc/bind/jarkom/sekiantterimakasih.it23.com.
 
 echo '
 ;
 ; BIND data file for local loopback interface
 ;
 $TTL    604800
-@       IN      SOA     sekianterimakasih.it23.com. root.sekianterimakasih.it23.com. (
+@       IN      SOA     sekiantterimakasih.it23.com. root.sekiantterimakasih.it23.com. (
                               2         ; Serial
                          604800         ; Refresh
                           86400         ; Retry
                         2419200         ; Expire
                          604800 )       ; Negative Cache TTL
 ;
-@       IN      NS      sekianterimakasih.it23.com.
-@       IN      A       10.75.2.14
-www     IN      CNAME   sekianterimakasih.it23.com. ' >> /etc/bind/jarkom/sekianterimakasih.it23.com
+@       IN      NS      sekiantterimakasih.it23.com.
+@       IN      A       10.75.2.13
+www     IN      CNAME   sekiantterimakasih.it23.com. ' > /etc/bind/jarkom/sekiantterimakasih.it23.com.
+
+service bind9 restart
 ```
 
-## Bedahulu 
+## Tanjungkulai
 ```bash
 echo '
 server {
     listen 80;
-    server_name sekianterimakasih.it23.com www.sekianterimakasih.it23.com;
+    server_name sekiantterimakasih.it23.com. www.sekiantterimakasih.it23.com.;
 
-    root /var/www/sekianterimakasih.it23.com/dir-listing/worker2;
+    root /var/www/sekiantterimakasih.it23.com./dir-listing/worker2;
     index index.php index.html index.htm;
 
     location / {
@@ -973,6 +1115,13 @@ unzip dir-listing.zip -d dir-listing
 mkdir /var/www/sekiantterimakasih.it23.com
 
 mv dir-listing/* /var/www/sekiantterimakasih.it23.com
+
+service nginx restart
 ```
 
 # no 20 
+Worker tersebut harus dapat di akses dengan sekiantterimakasih.xxxx.com dengan alias www.sekiantterimakasih.xxxx.com.
+
+(image-28)
+
+# Alhamdulillah 'ala Kulli Hal
