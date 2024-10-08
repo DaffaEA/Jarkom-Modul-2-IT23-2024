@@ -947,7 +947,7 @@ $TTL    604800
 ;
 @       IN      NS      sekianterimakasih.it23.com.
 @       IN      A       10.75.2.14
-www     IN      CNAME   sekianterimakasih.it23.com. ' > /etc/bind/jarkom/sekianterimakasih.it23.com
+www     IN      CNAME   sekianterimakasih.it23.com. ' >> /etc/bind/jarkom/sekianterimakasih.it23.com
 ```
 
 ## Bedahulu 
