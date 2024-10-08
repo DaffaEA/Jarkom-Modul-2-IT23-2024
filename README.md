@@ -761,11 +761,218 @@ service nginx restart
 # no 15
 
 # no 16
+## Sriwijaya
+
+```bash
+echo '
+zone "solok.it23.com" {
+    type master;
+    file "/etc/bind/it23/solok.it23.com";
+};' >> etc/bind/named.conf.local
+
+cp /etc/bind/db.local /etc/bind/jarkom/solok.it23.com
+
+echo '
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     solok.it23.com. root.solok.it23.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      solok.it23.com.
+@       IN      A       <best web server api>
+@       IN      AAAA    ::1
+www     IN      CNAME   solok.it23.com.
+``` ' >> /etc/bind/jarkom/solok.it23.com
+```
+
+## webserver terbaik
+```bash
+echo '
+server {
+    listen 80;
+
+    root /var/www/rujapala.it23.com;
+
+    index index.php index.html index.htm;
+    server_name _ rujapala.it23.com solok.it23.com www.rujapala.it23.com www.solok.it23.com;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}' > /etc/nginx/sites-available/jarkom
+```
 
 # no 17
+```bash
+echo '
+server {
+    listen 31400;
+
+    root /var/www/rujapala.it23.com;
+
+    index index.php index.html index.htm;
+    server_name _ rujapala.it23.com solok.it23.com www.rujapala.it23.com www.solok.it23.com;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+server {
+    listen 4696;
+
+    root /var/www/rujapala.it23.com;
+
+    index index.php index.html index.htm;
+    server_name _ rujapala.it23.com solok.it23.com www.rujapala.it23.com www.solok.it23.com;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}' > /etc/nginx/sites-available/jarkom
+```
+
 
 # no 18
 
+
+
+```bash
+apt-get install php-fpm -y
+
+echo '
+upstream webserver  {
+        server 10.75.2.12;
+        server 10.75.2.13;
+        server 10.75.2.14; 
+}
+
+server {
+    listen 80;
+    server_name _;
+
+    location / {
+        proxy_pass http://webserver;
+    }
+}
+
+server {
+    listen 80;
+
+    root /var/www/html;
+
+    index index.php index.html index.htm;
+    server_name www.solok.it23.com;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # pass PHP scripts to FastCGI server
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}
+
+server {
+    listen 80 default_server;
+    server_name _;
+    return 301 http://www.solok.it23.com;
+} ' > /etc/nginx/sites-available/jarkom
+```
+
 # no 19
+## Sriwijaya
+```bash
+echo '
+zone "sekiantterimakasih.it23.com" {
+    type master;
+    file "/etc/bind/it23/sekiantterimakasih.it23.com";
+}; >> /etc/bind/named.conf.local
+
+cp /etc/bind/db.local /etc/bind/jarkom/sekianterimakasih.it23.com
+
+echo '
+;
+; BIND data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     sekianterimakasih.it23.com. root.sekianterimakasih.it23.com. (
+                              2         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+;
+@       IN      NS      sekianterimakasih.it23.com.
+@       IN      A       10.75.2.14
+www     IN      CNAME   sekianterimakasih.it23.com. ' > /etc/bind/jarkom/sekianterimakasih.it23.com
+```
+
+## Bedahulu 
+```bash
+echo '
+server {
+    listen 80;
+    server_name sekianterimakasih.it23.com www.sekianterimakasih.it23.com;
+
+    root /var/www/sekianterimakasih.it23.com/dir-listing/worker2;
+    index index.php index.html index.htm;
+
+    location / {
+        autoindex on;
+        try_files $uri $uri/ =404;
+    }
+}' >> /etc/nginx/sites-available/jarkom
+
+wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JGk8b-tZgzAOnDqTx5B3F9qN6AyNs7Zy' -O dir-listing.zip
+
+unzip dir-listing.zip -d dir-listing
+
+mkdir /var/www/sekiantterimakasih.it07.com
+
+mv dir-listing/* /var/www/sekiantterimakasih.it07.com
+```
 
 # no 20 
