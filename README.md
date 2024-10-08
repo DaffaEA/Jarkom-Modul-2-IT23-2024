@@ -970,9 +970,9 @@ wget --no-check-certificate 'https://docs.google.com/uc?export=download&id=1JGk8
 
 unzip dir-listing.zip -d dir-listing
 
-mkdir /var/www/sekiantterimakasih.it07.com
+mkdir /var/www/sekiantterimakasih.it23.com
 
-mv dir-listing/* /var/www/sekiantterimakasih.it07.com
+mv dir-listing/* /var/www/sekiantterimakasih.it23.com
 ```
 
 # no 20 
