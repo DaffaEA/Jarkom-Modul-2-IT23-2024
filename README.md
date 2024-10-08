@@ -1,5 +1,10 @@
 # Jarkom-Modul-2-IT23-2024
 
+| Nama | NRP |
+| :--: | :--: |
+| Nabiel Nizar Anwari | 5027231087 |
+| Daffa Rajendra Priyatama | 5027231009 |
+
 # Write Up Jarkom Modul 2
 
 ## Membuat Topologi
