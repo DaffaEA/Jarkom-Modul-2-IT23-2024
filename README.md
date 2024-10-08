@@ -757,3 +757,15 @@ service nginx restart
 ![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/20.png)
 ![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/21.png)
 ![github-small](https://github.com/DaffaEA/Jarkom-Modul-2-IT23-2024/blob/main/image/22.png)
+
+# no 15
+
+# no 16
+
+# no 17
+
+# no 18
+
+# no 19
+
+# no 20 
